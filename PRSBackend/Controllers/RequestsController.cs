@@ -42,6 +42,50 @@ namespace PRSBackend.Controllers
             return request;
         }
 
+//PUT request statuses with totals over $50.00 to REVIEW: api/requests/review/5
+        [HttpPut("review/{id}")]
+        public async Task<ActionResult<Request>> PutRequestReview(Request request)
+        {
+        if(request.Total > 50.00m)
+        {
+            request.Status = "REVIEW";
+            _context.Requests.Add(request);
+            await _context.SaveChangesAsync();
+        }
+
+            return CreatedAtAction("GetOrder", new { id = request.Id }, request);
+        }
+
+//PUT request statuses with totals <= $50.00 to APPROVED: api/requests/approve/5
+        [HttpPut("approve/{id}")]
+        public async Task<ActionResult<Request>> PutRequestApprove(Request request)
+        {
+        if(request.Total <= 50.00m)
+        {
+            request.Status = "APPROVED";
+            _context.Requests.Add(request);
+            await _context.SaveChangesAsync();
+        }
+
+            return CreatedAtAction("GetOrder", new { id = request.Id }, request);
+        }
+
+//PUT status of provided request Id to REJECTED: api/requests/reject/5
+        [HttpPut("reject/{id}")]
+        public async Task<ActionResult<Request>> PutRequestReject(Request request, int id)
+        {
+            var request = await _context.Requests.FindAsync(id);
+        
+            if(request == null)
+            {
+            return NotFound();
+            }
+            else 
+            {
+            //set status to rejected if id is id and entry is rejected. 
+            return CreatedAtAction("GetOrder", new { request = request.Status }, "Rejected");
+        }
+
         // PUT: api/Requests/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRequest(int id, Request request)
@@ -72,6 +116,17 @@ namespace PRSBackend.Controllers
             return NoContent();
         }
 
+ //POST new requests with NEW status: api/Requests
+        [HttpPost]
+        public async Task<ActionResult<Order>> PostOrder(Order order)
+        {
+            order.Status = "NEW"; //this will make the status column for new orders first.
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetOrder", new { id = order.Id }, order); //instance of an order
+        }
+        
         // POST: api/Requests
         [HttpPost]
         public async Task<ActionResult<Request>> PostRequest(Request request)

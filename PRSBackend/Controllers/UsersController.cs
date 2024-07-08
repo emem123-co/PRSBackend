@@ -41,7 +41,7 @@ namespace PRSBackend.Controllers
 
             return user;
         }
-        //GET: api/Users/{username}/{password}
+ //GET: api/Users/{username}/{password}
         [HttpGet("{Username}/{Password}")]
         public async Task<ActionResult<User>> LoginUser(string userName, string password)
         {
@@ -85,7 +85,6 @@ namespace PRSBackend.Controllers
         }
 
         // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {

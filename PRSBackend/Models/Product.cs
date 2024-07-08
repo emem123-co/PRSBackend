@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PRSBackend.Models;
 
-[Index(nameof(PartNumber), IsUnique = true)]
+[Index(nameof(PartNbr), IsUnique = true)]
 public class Product
 {
     public int Id { get; set; }
 
 
     [StringLength(30)]
-    public string PartNumber { get; set; } = string.Empty;
+    public string PartNbr { get; set; } = string.Empty;
 
 
     [StringLength(30)]

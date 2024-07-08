@@ -32,15 +32,18 @@ namespace PRSBackend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return product;
+        var product = await _context.Products.FindAsync(id); //try a join here where p.vendor.Id = p.vendorId. 
+        if (product == null)
+        {
+            return NotFound();
         }
+        return product;
+        }
+        //return product = from p in _context.Products
+        //       join v in _context.Vendors
+        //            on p.VendorId equals v.Id
+        //       where p.Id == id
+        //       select();
 
         // PUT: api/Products/5
         [HttpPut("{id}")]
