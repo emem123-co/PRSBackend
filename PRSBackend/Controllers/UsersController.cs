@@ -54,6 +54,22 @@ namespace PRSBackend.Controllers
             return user;
         }
 
+/*GET: api/Users/{username}/{password} create this to pull the current id by calling the LoginUser method. 
+        [HttpGet("{Username}/{Password}")]
+        public async Task<ActionResult<User>> LoginUser(string userName, string password)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == userName && x.Password == password);
+
+            if(user is null)
+            {
+                return NotFound();
+            }
+            return user;
+        }*/
+
+
+
+
         // PUT: api/Users/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)

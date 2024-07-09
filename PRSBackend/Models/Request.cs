@@ -25,7 +25,7 @@ public class Request
     
     
     [StringLength(10)] //user not able to change this directly
-    public string Status { get; set; } = "NEW";
+    public string Status { get; set; } = string.Empty;
     
     
     [Column(TypeName = "decimal(11,2)")] //user not able to change this directly
