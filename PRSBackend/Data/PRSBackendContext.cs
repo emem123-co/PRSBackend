@@ -19,5 +19,7 @@ namespace PRSBackend.Data
         public DbSet<Product> Products { get; set; } = default!;
         public DbSet<Request> Requests { get; set; } = default!;
         public DbSet<RequestLine> RequestLines { get; set; } = default!;
+        //public DbSet<Po> Pos { get; set; } = default!;
+        //public DbSet<Poline> Polines { get; set; } = default!;
     }
 }

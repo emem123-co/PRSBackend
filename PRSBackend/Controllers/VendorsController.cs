@@ -21,6 +21,38 @@ namespace PRSBackend.Controllers
             _context = context;
         }
 
+        //CREATE PO
+        [HttpGet("po/{vendorId}")]
+        public async Task<ActionResult<Po>> CreatePo(int vendorId)
+        {
+            Po po = new Po(); //instance of PO class. includes all properties. 
+            
+            var newVendor = await GetVendor(vendorId);
+            
+            newVendor = po.Vendor;
+
+            var polines = (from v in _context.Vendors 
+                          join p in _context.Products
+                            on v.Id equals p.VendorId
+                          join rql in _context.RequestLines 
+                            on p.Id equals rql.ProductID
+                          join r in _context.Requests
+                          on rql.RequestID equals r.Id
+                          where r.Status == "APPROVED"
+                          select new
+                          {
+                            p.Id,
+                            Product = p.Name,
+                            rql.Quantity,
+                            p.Price,
+                            LineTotal = (p.Price * rql.Quantity)
+                          });
+
+            
+            
+        return Ok();   
+        }
+
         // GET: api/Vendors
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Vendor>>> GetVendor()
@@ -38,7 +70,6 @@ namespace PRSBackend.Controllers
             {
                 return NotFound();
             }
-
             return vendor;
         }
 
