@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PRSBackend.Data;
 
@@ -10,9 +11,11 @@ using PRSBackend.Data;
 namespace PRSBackend.Migrations
 {
     [DbContext(typeof(PRSBackendContext))]
-    partial class PRSBackendContextModelSnapshot : ModelSnapshot
+    [Migration("20240710144336_change phone")]
+    partial class changephone
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

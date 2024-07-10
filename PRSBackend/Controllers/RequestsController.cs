@@ -82,6 +82,10 @@ namespace PRSBackend.Controllers
             {
                 request.Status = "REVIEW";
             }
+            else
+            {
+                request.Status = "APPROVED";
+            }
             await _context.SaveChangesAsync();
             return await PutRequest(id, request);
         }
@@ -90,11 +94,8 @@ namespace PRSBackend.Controllers
         [HttpPut("approve/{id}")]
         public async Task<IActionResult> PutApprove(int id, Request request)
         {
-            if (request.Total <= 50.00m)
-            {
                 request.Status = "APPROVED";
-            }
-            await _context.SaveChangesAsync();
+            
             return await PutRequest(id, request);
         }
 
@@ -146,15 +147,12 @@ namespace PRSBackend.Controllers
 
         // POST: api/Requests
         [HttpPost]
-        public async Task<ActionResult<Request>> PostRequest(Request request, User user)
+        public async Task<ActionResult<Request>> PostRequest(Request request)
         {
             request.Status = "NEW"; //this will make the status column for new orders first.
 
             _context.Requests.Add(request);
             await _context.SaveChangesAsync();
-            await PutApprove(request.Id, request);
-            await PutReview(request.Id, request);
-            await PutReject(request.Id, request);
 
             return CreatedAtAction("GetRequest", new { id = request.Id }, request);
         }

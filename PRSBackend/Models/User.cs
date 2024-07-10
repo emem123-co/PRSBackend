@@ -29,7 +29,7 @@ public class User
 
 
     [StringLength(12)]
-    public string? PhoneNumber {get; set; } = string.Empty;
+    public string? Phone {get; set; } = string.Empty;
 
 
     [StringLength(255)]

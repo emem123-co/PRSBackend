@@ -28,6 +28,19 @@ namespace PRSBackend.Controllers
             return await _context.Products.ToListAsync();
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Product>> GetProduct(int id)
+        {
+            var product = await _context.Products.Include(x => x.Vendor).SingleOrDefaultAsync(x => x.Id == id);
+
+            if(product is null)
+            {
+                return NotFound();
+            }
+
+            return product;
+        }
+
         //PUT: api/Products/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduct(int id, Product product)
