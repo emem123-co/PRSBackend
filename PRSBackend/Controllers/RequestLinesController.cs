@@ -20,7 +20,26 @@ namespace PRSBackend.Controllers
         {
             _context = context;
         }
-
+ //Recalculate Total
+        private async Task<IActionResult> RecalculateRequestTotal(int? requestID)
+        {
+            var request = await _context.Requests.FindAsync(requestID);
+            if(requestID is null)
+            {
+                return NotFound();
+            }
+            request.Total = (from rl in _context.RequestLines
+                          join p in _context.Products
+                            on rl.ProductID equals p.Id
+                          where rl.RequestID == requestID
+                          select new
+                          {
+                          rLineTotal = rl.Quantity * p.Price 
+                          }).Sum(x => x.rLineTotal); 
+           await _context.SaveChangesAsync();
+           return Ok();
+        }
+    
         // GET: api/RequestLines
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RequestLine>>> GetRequestLine()
@@ -56,6 +75,7 @@ namespace PRSBackend.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                await RecalculateRequestTotal(requestLine.RequestID);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,6 +98,7 @@ namespace PRSBackend.Controllers
         {
             _context.RequestLines.Add(requestLine);
             await _context.SaveChangesAsync();
+            await RecalculateRequestTotal(requestLine.RequestID);
 
             return CreatedAtAction("GetRequestLine", new { id = requestLine.Id }, requestLine);
         }
@@ -93,6 +114,7 @@ namespace PRSBackend.Controllers
             }
 
             _context.RequestLines.Remove(requestLine);
+            await RecalculateRequestTotal(requestLine.RequestID);
             await _context.SaveChangesAsync();
 
             return NoContent();

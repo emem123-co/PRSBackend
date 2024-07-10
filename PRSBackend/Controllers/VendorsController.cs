@@ -43,7 +43,6 @@ namespace PRSBackend.Controllers
         }
 
         // PUT: api/Vendors/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutVendor(int id, Vendor vendor)
         {
@@ -74,7 +73,6 @@ namespace PRSBackend.Controllers
         }
 
         // POST: api/Vendors
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Vendor>> PostVendor(Vendor vendor)
         {

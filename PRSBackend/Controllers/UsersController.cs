@@ -41,64 +41,52 @@ namespace PRSBackend.Controllers
 
             return user;
         }
- //GET: api/Users/{username}/{password}
+ //GET current user: api/Users/{username}/{password}
         [HttpGet("{Username}/{Password}")]
-        public async Task<ActionResult<User>> LoginUser(string userName, string password)
+        public async Task<ActionResult<User>> Login(string userName, string password)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == userName && x.Password == password);
 
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == userName && x.Password == password);
+            
             if(user is null)
             {
                 return NotFound();
             }
-            return user;
+            return user; //user with that username and passowrd is found
+            
+ //if user is found, store in service instance available to all components. use this to set the user id to the Id pk when requests are created.
+            
         }
-
-/*GET: api/Users/{username}/{password} create this to pull the current id by calling the LoginUser method. 
-        [HttpGet("{Username}/{Password}")]
-        public async Task<ActionResult<User>> LoginUser(string userName, string password)
-        {
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == userName && x.Password == password);
-
-            if(user is null)
-            {
-                return NotFound();
-            }
-            return user;
-        }*/
-
-
-
 
         // PUT: api/Users/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
-        {
-            if (id != user.Id)
+            public async Task<IActionResult> PutUser(int id, User user)
             {
-                return BadRequest();
-            }
-
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
+                if (id != user.Id)
                 {
-                    return NotFound();
+                    return BadRequest();
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
-        }
+                _context.Entry(user).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return NoContent();
+            }
 
         // POST: api/Users
         [HttpPost]

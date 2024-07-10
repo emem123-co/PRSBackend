@@ -43,4 +43,10 @@ public class User
     [Column(TypeName = "bit")]
     public bool IsAdmin {get; set; }
 
+    //constructor for Login(username, password)
+    //{
+    //return User.Id
+    //};
 }
+  
+   

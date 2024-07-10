@@ -16,24 +16,25 @@ public class Request
     public string Justification { get; set; } = string.Empty;
     
     
-    [StringLength(80)] //cannot be null only if the request is rejected 
-    public string? RejectionReasoning { get; set; } = string.Empty;
+    [StringLength(80)] 
+    public string? RejectionReasoning { get; set; } = string.Empty; //cannot be null only when status is "REJECTED"
     
     
     [StringLength(20)]
     public string DeliveryMode { get; set; } = "PICKUP";
     
     
-    [StringLength(10)] //user not able to change this directly
-    public string Status { get; set; } = string.Empty;
+    [StringLength(10)] 
+    public string Status { get; set; } = string.Empty; //user not able to change this directly. Application will update via Requests controller. NEW / APPROVED / REJECTED / REVIEW
     
     
-    [Column(TypeName = "decimal(11,2)")] //user not able to change this directly
-    public decimal Total { get; set; } = 0;
+    [Column(TypeName = "decimal(11,2)")] 
+    public decimal Total { get; set; } = 0; //user not able to change this directly. Application will update via RequestLines controller.
     
-    public int UserId { get; set; } //automatically set this to the ID of the logged in user
+    public int UserId { get; set; } //automatically will be the ID of the logged in user
     public virtual User? User { get; set; } 
     
     
     public virtual ICollection<RequestLine>? Requestlines { get; set; } = new List<RequestLine>();
+    
 }

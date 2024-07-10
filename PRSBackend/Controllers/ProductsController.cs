@@ -28,24 +28,7 @@ namespace PRSBackend.Controllers
             return await _context.Products.ToListAsync();
         }
 
-        // GET: api/Products/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Product>> GetProduct(int id)
-        //{
-        //var product = await _context.Products.FindAsync(id); //try a join here where p.vendor.Id = p.vendorId. 
-        //if (product == null)
-        //{
-        //    return NotFound();
-        //}
-        ////return await _context.Products.ToListAsync();
-        //}
-        ////return product = from p in _context.Products
-        ////       join v in _context.Vendors
-        ////            on p.VendorId equals v.Id
-        ////       where p.Id == id
-        ////       select new ();
-
-        //// PUT: api/Products/5
+        //PUT: api/Products/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduct(int id, Product product)
         {
