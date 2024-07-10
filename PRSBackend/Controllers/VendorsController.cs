@@ -48,6 +48,26 @@ namespace PRSBackend.Controllers
                             LineTotal = (p.Price * rql.Quantity)
                           });
 
+            var sortedLines = new SortedList<int, Poline>(); //new collection with int as key and Poline as data.
+
+            //foreach(var line in sortedLines)
+            //{
+            //    if(!sortedLines.ContainsKey(line.Key))
+            //    {
+            //        var poline = new Poline()
+            //        {
+            //            Product = l.Product
+            //            Quantity = 0
+            //            Price = l.Price
+            //            LineTotal = 
+
+            //        };
+            //    }
+            //}
+            
+
+            
+
             
             
         return Ok();   
