@@ -45,92 +45,72 @@ namespace PRSBackend.Controllers
             return request;
         }
 
-//GET REVIEW by USER ID (not belonging to current user): api/requests/reviews/{userId}
-        [HttpGet("Requests/Reviews/{userId}")]
-        //public async Task<IActionResult> GetReviews(Request requests, User users, int userId)
-        
-        //if user.Id == userId
-        //do not show items with request.Status = "REVIEW"
+        //GET REVIEW by USER ID (not belonging to current user): api/requests/reviews/{userId}
+        [HttpGet("reviews/{userId}")] //make all lowercase
+        public async Task<ActionResult<IEnumerable<Request>>> GetReviews(int userId)
+        {
+            var inReview = from req in _context.Requests
+                           where req.Status == "REVIEW"
+                           && req.UserId != userId //remember && for SQL syntax
+                           select req;
 
-            //UserId is automatically set to the Id of the logged in user?
-            //var currentuserId = _context.Requests.UserId;
-            
-           //var inReview = from r in _context.Requests 
-            //               where r.Status == "REVIEW"
-            //               and r.UserId != userId
-            //               select requests;
-                                           
-                    
-        //    }
-        //    //list of requests that are in review that do NOT have the userId of current user.
+            return await inReview.ToListAsync();
+        }
+ 
 
-        //    var inReview = await _context.Requests.UserId.FindAsync(userId);
-
-
-        //                return requests.ToList
-        //    return inReview;
-        //}
-
-
-//GET requests by STATUS: api/requests/status/{status}
-        [HttpGet("Requests/Status/{status}")]
+        //GET requests by STATUS: api/requests/status/{status}
+        [HttpGet("/status/{status}")]
         public async Task<ActionResult<IEnumerable<Request>>> GetRequestByStatus(Request request, string status)
         {
-            if(request.Status != status)
+            if (request.Status != status)
             {
-            return NotFound();
+                return NotFound();
             }
-            
+
             var statusList = from r in _context.Requests
                              where r.Status == status
                              select r;
 
-            await _context.SaveChangesAsync();
-
-            return statusList.ToList();
+            return await statusList.ToListAsync();
         }
-        
-//PUT REVIEW status if >= $50.00m: api/requests/review/5
-        [HttpPut("Requests/Review/{id}")]
+
+        //PUT REVIEW status if >= $50.00m: api/requests/review/5
+        [HttpPut("review/{id}")]
         public async Task<IActionResult> PutReview(int id, Request request)
         {
-            if(request.Total > 50.00m)
+            if (request.Total > 50.00m)
             {
                 request.Status = "REVIEW";
-            }
-        await _context.SaveChangesAsync();
-        return await PutRequest(id, request);
-        }
-
-//PUT APPROVED status if < $50.00: api/requests/approve/5
-        [HttpPut("Requests/Approve/{id}")]
-        public async Task<IActionResult> PutApprove(int id, Request request)
-        {
-            if (request.Total <= 50.00m)  
-            {
-                request.Status = "APPROVED";
-            }
-        await _context.SaveChangesAsync();
-        return await PutRequest(id, request);
-        }
-
-//PUT REJECTED status: api/requests/reject/5
-        [HttpPut("Requests/Reject/{id}")]
-        public async Task<IActionResult> PutReject(int id, Request request)
-        {
-            if(id == request.Id)
-            {
-               request.Status = "REJECTED";
             }
             await _context.SaveChangesAsync();
             return await PutRequest(id, request);
         }
 
-//PUT userId as the current user:
+        //PUT APPROVED status if < $50.00: api/requests/approve/5
+        [HttpPut("approve/{id}")]
+        public async Task<IActionResult> PutApprove(int id, Request request)
+        {
+            if (request.Total <= 50.00m)
+            {
+                request.Status = "APPROVED";
+            }
+            await _context.SaveChangesAsync();
+            return await PutRequest(id, request);
+        }
 
+        //PUT REJECTED status: api/requests/reject/5
+        [HttpPut("reject/{id}")]
+        public async Task<IActionResult> PutReject(int id, Request request)
+        {
+            if (id == request.Id)
+            {
+                request.Status = "REJECTED";
+            }
+            await _context.SaveChangesAsync();
+            return await PutRequest(id, request);
+        }
 
-
-
+        //userId as the current user will be assigned in front end
 
 
         // PUT: api/Requests/5
@@ -163,13 +143,13 @@ namespace PRSBackend.Controllers
             return NoContent();
         }
 
- 
-// POST: api/Requests
+
+        // POST: api/Requests
         [HttpPost]
         public async Task<ActionResult<Request>> PostRequest(Request request, User user)
         {
             request.Status = "NEW"; //this will make the status column for new orders first.
-                             
+
             _context.Requests.Add(request);
             await _context.SaveChangesAsync();
             await PutApprove(request.Id, request);

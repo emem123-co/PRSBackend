@@ -31,11 +31,14 @@ public class Product
 
 
     public int VendorId { get; set; }
-    public virtual Vendor? Vendor { get; set; } //place vendorID once user selects it in POST or PUT.
-
-
-    public virtual ICollection<Vendor>? Vendors { get; set; } = new List<Vendor>();
+    public virtual Vendor? Vendor { get; set; }
+    //place vendorID once user selects it in POST or PUT.
     //display list of vendor names when user is creating (POST)
     //display current vendor when user is editing (PUT) a product. 
+
+
+    //public virtual ICollection<Vendor>? Vendors { get; set; } = new List<Vendor>();
+    //return list of products if in this is in the vendor class
+
 
 }

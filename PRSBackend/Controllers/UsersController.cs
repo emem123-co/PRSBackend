@@ -41,7 +41,7 @@ namespace PRSBackend.Controllers
 
             return user;
         }
- //GET current user: api/Users/{username}/{password}
+ //GET current user: api/users/{username}/{password}
         [HttpGet("{Username}/{Password}")]
         public async Task<ActionResult<User>> Login(string userName, string password)
         {
@@ -54,7 +54,7 @@ namespace PRSBackend.Controllers
             }
             return user; //user with that username and passowrd is found
             
- //if user is found, store in service instance available to all components. use this to set the user id to the Id pk when requests are created.
+            //FRONTEND: if user is found, store in service instance available to all components. use this to set the user id to the Id pk when requests are created.
             
         }
 
