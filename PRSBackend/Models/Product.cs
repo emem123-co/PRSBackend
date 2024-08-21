@@ -32,6 +32,7 @@ public class Product
 
     public int VendorId { get; set; }
     public virtual Vendor? Vendor { get; set; }
+
     //place vendorID once user selects it in POST or PUT.
     //display list of vendor names when user is creating (POST)
     //display current vendor when user is editing (PUT) a product. 

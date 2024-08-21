@@ -114,7 +114,7 @@ namespace PRSBackend.Controllers
         //userId as the current user will be assigned in front end
 
 
-        // PUT: api/Requests/5
+        // PUT: api/requests/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRequest(int id, Request request)
         {
@@ -157,7 +157,7 @@ namespace PRSBackend.Controllers
             return CreatedAtAction("GetRequest", new { id = request.Id }, request);
         }
 
-        // DELETE: api/Requests/5
+        // DELETE: api/requests/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRequest(int id)
         {

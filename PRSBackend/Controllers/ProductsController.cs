@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,8 @@ namespace PRSBackend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProduct()
         {
-            return await _context.Products.ToListAsync();
+            
+            return await _context.Products.Include(x => x.Vendor).ToListAsync();
         }
 
         [HttpGet("{id}")]
@@ -40,6 +42,7 @@ namespace PRSBackend.Controllers
 
             return product;
         }
+
 
         //PUT: api/Products/5
         [HttpPut("{id}")]
@@ -102,4 +105,6 @@ namespace PRSBackend.Controllers
             return _context.Products.Any(e => e.Id == id);
         }
     }
+
+    internal record NewRecord(int Id, int VendorId, string Name, string PartNbr, string Unit, decimal Price, string? PhotoPath, string VendorName, string? VendorPhone);
 }
