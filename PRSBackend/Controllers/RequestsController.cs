@@ -28,14 +28,14 @@ namespace PRSBackend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Request>>> GetRequest()
         {
-            return await _context.Requests.ToListAsync();
+            return await _context.Requests.Include(x => x.User).ToListAsync();
         }
 
         // GET: api/Requests/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Request>> GetRequest(int id)
         {
-            var request = await _context.Requests.FindAsync(id);
+            var request = await _context.Requests.Include(x => x.User).Include(x => x.Requestlines).ThenInclude(x => x.Product).SingleOrDefaultAsync(x => x.Id == id);
 
             if (request == null)
             {
@@ -71,7 +71,7 @@ namespace PRSBackend.Controllers
                              where r.Status == status
                              select r;
 
-            return await statusList.ToListAsync();
+            return await statusList.Include(x => x.User).ToListAsync();
         }
 
         //PUT REVIEW status if >= $50.00m: api/requests/review/5
@@ -157,8 +157,8 @@ namespace PRSBackend.Controllers
             return CreatedAtAction("GetRequest", new { id = request.Id }, request);
         }
 
-        // DELETE: api/requests/5
-        [HttpDelete("{id}")]
+        // DELETE: api/requests/delete/5
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteRequest(int id)
         {
             var request = await _context.Requests.FindAsync(id);

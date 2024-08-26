@@ -95,7 +95,7 @@ namespace PRSBackend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Vendor>> GetVendor(int id)
         {
-            var vendor = await _context.Vendors.FindAsync(id);
+            var vendor = await _context.Vendors.SingleOrDefaultAsync(x => x.Id == id);
 
             if (vendor == null)
             {
@@ -146,8 +146,8 @@ namespace PRSBackend.Controllers
             return CreatedAtAction("GetVendor", new { id = vendor.Id }, vendor);
         }
 
-        // DELETE: api/Vendors/5
-        [HttpDelete("{id}")]
+        // DELETE: api/Vendors/delete/5
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteVendor(int id)
         {
             var vendor = await _context.Vendors.FindAsync(id);

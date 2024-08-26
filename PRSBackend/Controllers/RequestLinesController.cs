@@ -42,16 +42,20 @@ namespace PRSBackend.Controllers
     
         // GET: api/RequestLines
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RequestLine>>> GetRequestLine()
+        public async Task<ActionResult<IEnumerable<RequestLine>>> GetRequestLines()
         {
-            return await _context.RequestLines.Include(x => x.Product).Include(x => x.Request).ToListAsync();
+            if (_context.RequestLines != null)
+            {
+                return await _context.RequestLines.Include(x => x.Product).ToListAsync();
+            }
+            return NotFound();
         }
 
         // GET: api/RequestLines/5
         [HttpGet("{id}")]
         public async Task<ActionResult<RequestLine>> GetRequestLine(int id)
         {
-            var requestLine = await _context.RequestLines.FindAsync(id);
+            var requestLine = await _context.RequestLines.Include(x => x.Product).SingleOrDefaultAsync(x => x.Id == id);
 
             if (requestLine == null)
             {
@@ -96,6 +100,10 @@ namespace PRSBackend.Controllers
         [HttpPost]
         public async Task<ActionResult<RequestLine>> PostRequestLine(RequestLine requestLine)
         {
+
+         if(_context.RequestLines == null) {
+                return Problem("Entity set 'PrsDbContext.Requestlines' is null.");
+            }
             _context.RequestLines.Add(requestLine);
             await _context.SaveChangesAsync();
             await RecalculateRequestTotal(requestLine.RequestID);
@@ -103,7 +111,7 @@ namespace PRSBackend.Controllers
             return CreatedAtAction("GetRequestLine", new { id = requestLine.Id }, requestLine);
         }
 
-        // DELETE: api/RequestLines/5
+        // DELETE: api/RequestLines/delete/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRequestLine(int id)
         {
